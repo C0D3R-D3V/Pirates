@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Jack Sparrow's Voyage Booking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cedarville+Cursive&family=Pirata+One&family=UnifrakturMaguntia&family=MedievalSharp&family=Rye&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="custom-cursor">
+        <img src="./assets/images/compass-cursor.png" alt="cursor" class="cursor-image">
+    </div>
+    <div class="global-fx">
+        <canvas id="grain-canvas" class="grain-overlay"></canvas>
+        <div class="vignette"></div>
+        <canvas id="particles-canvas" class="particles"></canvas>
+        <video class="fog-overlay" autoplay loop muted playsinline>
+            <source src="./assets/video/fog-overlay.mp4" type="video/mp4">
+        </video>
+        <div class="light-leak"></div>
+    </div>
+    <div class="audio-toggle" id="audioToggle">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path class="speaker" d="M16 8L10 14H6v4h4l6 6V8z" fill="#ffd700" />
+            <path class="sound-waves" d="M20 12c1.5 1.5 1.5 4 0 5.5M23 9c3 3 3 8 0 11" stroke="#ffd700" stroke-width="2" />
+        </svg>
+    </div>
+    <div class="drunk-toggle" id="drunkToggle">
+        <img src="./assets/images/rum-bottle.png" alt="Drunk Mode">
+        <span class="tooltip">Drink Up Me Hearties!</span>
+    </div>
+    <nav class="compass-nav" id="compassNav">
+        <div class="compass-center">
+            <img src="./assets/images/compass-rose.svg" alt="compass" class="compass-image">
+        </div>
+        <div class="compass-menu">
+            <a href="#chart-room" class="compass-item" data-direction="N">
+                <span>Chart Room</span>
+            </a>
+            <a href="#ship-manifest" class="compass-item" data-direction="E">
+                <span>Ship Manifest</span>
+            </a>
+            <a href="#below-deck" class="compass-item" data-direction="S">
+                <span>Below Deck</span>
+            </a>
+            <a href="#contract" class="compass-item" data-direction="W">
+                <span>Contract</span>
+            </a>
+        </div>
+    </nav>
+    <div class="intro-scene" id="introScene">
+        <div class="intro-content">
+            <img src="./assets/images/compass-large.png" alt="compass" class="intro-compass">
+            <div class="loading-text">Consulting the stars...</div>
+            <img src="./assets/images/rum-silhouette.svg" alt="rum" class="rum-bottle">
+        </div>
+        <audio id="thunderSound" src="./assets/audio/thunder.mp3"></audio>
+    </div>
+    <main id="mainContent">
+        <section class="page chart-room active" id="chart-room">
+            <video class="background-video" autoplay loop muted playsinline>
+                <source src="./assets/video/ship-fog-loop.mp4" type="video/mp4">
+            </video>
+            <div class="parallax-container">
+                <img src="./assets/images/nautical-map.jpg" alt="map" class="parallax-map">
+            </div>
+            <div class="page-bg-overlay"></div>
+            <div class="content-wrapper chart-room-layout">
+                <div class="chart-room-main">
+                    <h1 class="page-title pirate-title">
+                        <span class="title-word">Captain</span>
+                        <span class="title-word">Jack's</span>
+                        <span class="title-word">Voyage</span>
+                        <span class="title-word">Planner</span>
+                    </h1>
+                    <div class="logbook-search">
+                        <div class="logbook-header">
+                            <h2>Chart Yer Course, Mate</h2>
+                            <p class="handwritten">"The seas be calling... or is that the rum?"</p>
+                        </div>
+                        <form id="searchForm" class="search-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="ink-label">Departure Port</label>
+                                    <select name="from" class="pirate-input" required>
+                                        <option value="">Choose yer port...</option>
+                                        <option value="tortuga">Tortuga</option>
+                                        <option value="port-royal">Port Royal</option>
+                                        <option value="singapore">Singapore</option>
+                                        <option value="shipwreck-cove">Shipwreck Cove</option>
+                                        <option value="whitecap-bay">Whitecap Bay</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="ink-label">Destination</label>
+                                    <select name="to" class="pirate-input" required>
+                                        <option value="">Where to, savvy?</option>
+                                        <option value="isla-de-muerta">Isla de Muerta</option>
+                                        <option value="davy-jones-locker">Davy Jones' Locker</option>
+                                        <option value="fountain-of-youth">Fountain of Youth</option>
+                                        <option value="dead-mans-cove">Dead Man's Cove</option>
+                                        <option value="rumrunner-isle">Rumrunner's Isle</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="ink-label">Sailing Moon Phase</label>
+                                    <div class="moon-slider">
+                                        <input type="range" name="moonPhase" min="0" max="7" value="4" class="moon-input">
+                                        <div class="moon-phases">
+                                            <span>🌑</span><span>🌒</span><span>🌓</span><span>🌔</span>
+                                            <span>🌕</span><span>🌖</span><span>🌗</span><span>🌘</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="ink-label">Crew Size</label>
+                                    <input type="number" name="crew" class="pirate-input" min="1" max="10" value="1" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="chart-button">
+                                <span class="button-text">Chart Course</span>
+                                <span class="button-glow"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <aside class="chart-room-portrait" aria-label="Captain Jack Sparrow">
+                    <div class="portrait-wrapper">
+                        <img src="./assets/images/jack_waving.jpeg" alt="Captain Jack Sparrow waving" class="jack-waving-portrait" onerror="this.closest('.chart-room-portrait').classList.add('portrait-hidden')">
+                        <div class="portrait-vignette"></div>
+                    </div>
+                    <p class="portrait-caption handwritten">"Not all treasure is silver and gold, mate."</p>
+                </aside>
+            </div>
+        </section>
+        <section class="page ship-manifest" id="ship-manifest">
+            <div class="page-bg-overlay ship-manifest-overlay"></div>
+            <div class="content-wrapper">
+                <h1 class="page-title">Available Vessels</h1>
+                <p class="subtitle handwritten">"Pick yer poison, but choose wisely... or don't"</p>
+                <div class="filter-panel">
+                    <div class="wooden-board">
+                        <h3>Sort By:</h3>
+                        <button class="filter-btn active" data-filter="all">All Ships</button>
+                        <button class="filter-btn" data-filter="fastest">Fastest</button>
+                        <button class="filter-btn" data-filter="cheapest">Cheapest</button>
+                        <button class="filter-btn" data-filter="safest">Safest (Boring)</button>
+                    </div>
+                </div>
+                <div class="ships-container" id="shipsContainer"></div>
+            </div>
+            <canvas id="dust-canvas" class="dust-particles"></canvas>
+        </section>
+        <section class="page below-deck" id="below-deck">
+            <div class="page-bg-overlay below-deck-overlay"></div>
+            <div class="content-wrapper">
+                <h1 class="page-title">Choose Yer Berth</h1>
+                <p class="subtitle handwritten">"Don't blame me if ye wake up with rats"</p>
+                <div class="deck-container">
+                    <svg class="ship-diagram" viewBox="0 0 800 1200" id="shipDiagram" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="woodGrain" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3e2723;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#5d4037;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#3e2723;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="shipShadow">
+                                <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
+                                <feOffset dx="0" dy="10" result="offsetblur" />
+                                <feComponentTransfer>
+                                    <feFuncA type="linear" slope="0.5" />
+                                </feComponentTransfer>
+                                <feMerge>
+                                    <feMergeNode />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path d="M400 50 Q450 80 480 120 L500 150 L510 300 L510 900 L490 1050 L450 1150 L350 1150 L310 1050 L290 900 L290 300 L300 150 L320 120 Q350 80 400 50 Z" fill="url(#woodGrain)" stroke="#1a1410" stroke-width="5" filter="url(#shipShadow)" />
+                        <rect x="310" y="200" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="250" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="300" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="450" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="500" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="650" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="700" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="310" y="850" width="180" height="3" fill="#2d1a16" opacity="0.5" />
+                        <rect x="395" y="100" width="10" height="150" fill="#2d1a16" stroke="#1a1410" stroke-width="2" />
+                        <path d="M310 200 L310 900" stroke="#1a1410" stroke-width="3" fill="none" />
+                        <path d="M490 200 L490 900" stroke="#1a1410" stroke-width="3" fill="none" />
+                    </svg>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="icon skull">☠️</span>
+                            <span>Taken (probably dead)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="icon circle">⭕</span>
+                            <span>Available (maybe)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="icon selected">❌</span>
+                            <span>Yer Choice</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="chart-button proceed-btn" id="proceedToContract">
+                    Continue to Contract
+                </button>
+            </div>
+        </section>
+        <section class="page contract-page" id="contract">
+            <div class="desk-scene">
+                <img src="./assets/images/desk-texture.jpg" alt="desk" class="desk-background">
+                <div class="desk-overlay"></div>
+                <img src="./assets/images/candle.gif" alt="candle" class="candle candle-left">
+                <img src="./assets/images/candle.gif" alt="candle" class="candle candle-right">
+                <div class="parchment-contract">
+                    <h1 class="contract-title">Pirate's Agreement</h1>
+                    <div class="contract-text handwritten">
+                        <p>By signin' this here document, ye agree to:</p>
+                        <ul>
+                            <li>Follow the Pirate's Code (more like guidelines)</li>
+                            <li>Share yer rum (reluctantly)</li>
+                            <li>Not mutiny (at least not on Tuesdays)</li>
+                            <li>Sing sea shanties when prompted</li>
+                        </ul>
+                    </div>
+                    <form id="contractForm" class="contract-form">
+                        <div class="form-group">
+                            <label class="ink-label">Full Name (or alias)</label>
+                            <input type="text" name="name" class="handwritten-input" required placeholder="Bootstrap Bill Turner...">
+                        </div>
+                        <div class="form-group">
+                            <label class="ink-label">Pirate Oath</label>
+                            <textarea name="oath" class="handwritten-input" rows="3" required placeholder="I solemnly swear I'm up to no good..."></textarea>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <label for="agreeTerms">I understand Jack Sparrow is not responsible for curses, krakens, or hangovers</label>
+                        </div>
+                        <button type="submit" class="seal-button">
+                            <img src="./assets/images/wax-seal.png" alt="seal" class="wax-seal">
+                            <span>Seal the Deal</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section class="page success-page" id="success">
+            <div class="page-bg-overlay success-overlay"></div>
+            <div class="content-wrapper">
+                <h1 class="page-title">Voyage Confirmed!</h1>
+                <div class="ticket-scroll" id="ticketScroll">
+                    <div class="scroll-top"></div>
+                    <div class="scroll-content">
+                        <h2 class="ticket-title">Boarding Pass</h2>
+                        <div class="ticket-details" id="ticketDetails"></div>
+                        <div class="captain-signature handwritten">
+                            ~ Captain Jack Sparrow
+                        </div>
+                    </div>
+                    <div class="scroll-bottom"></div>
+                </div>
+                <img src="./assets/images/jack-sparrow-dance.gif" alt="Jack Sparrow" class="jack-easter-egg">
+                <p class="success-message">"We sail at dawn... or whenever I wake up"</p>
+                <button class="chart-button download-btn" id="downloadTicket">
+                    Download Ticket
+                </button>
+                <button class="chart-button secondary-btn" id="newVoyage">
+                    Plan Another Voyage
+                </button>
+            </div>
+        </section>
+        <section class="page not-found-page" id="not-found" style="display: none;">
+            <img src="./assets/images/desert-island.jpg" alt="island" class="island-background">
+            <div class="island-overlay"></div>
+            <div class="content-wrapper">
+                <h1 class="error-title">404</h1>
+                <p class="error-message">"Why is the rum gone?"</p>
+                <p class="error-subtitle">The page ye seek has sailed away</p>
+                <button class="chart-button" onclick="navigateToPage('chart-room')">
+                    Return to Port
+                </button>
+            </div>
+        </section>
+    </main>
+    <div class="lantern-light" id="lanternLight"></div>
+    <img src="./assets/images/seagull.gif" alt="seagull" class="seagull" id="seagull">
+    <audio id="oceanAmbience" loop>
+        <source src="./assets/audio/ocean-ambience.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="woodCreak">
+        <source src="./assets/audio/wood-creak.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="coinClick">
+        <source src="./assets/audio/coin-click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="swordUnsheath">
+        <source src="./assets/audio/sword-unsheath.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="parchmentRustle">
+        <source src="./assets/audio/parchment-rustle.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rumSound">
+        <source src="./assets/audio/rum-drink.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="distantLaughter">
+        <source src="./assets/audio/distant-laughter.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="daggerSound">
+        <source src="./assets/audio/dagger-stab.mp3" type="audio/mpeg">
+    </audio>
+    <script src="voyages.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
